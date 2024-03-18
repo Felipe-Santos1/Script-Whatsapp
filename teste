@@ -1,0 +1,37 @@
+async function enviarScript(scriptText){
+	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
+	main = document.querySelector("#main"),
+	textarea = main.querySelector(`div[contenteditable="true"]`)
+	
+	if(!textarea) throw new Error("Não há uma conversa aberta")
+	
+	for(const line of lines){
+		console.log(line)
+	
+		textarea.focus();
+		document.execCommand('insertText', false, line);
+		textarea.dispatchEvent(new Event('change', {bubbles: true}));
+	
+		setTimeout(() => {
+			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
+		}, 100);
+		
+		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
+	}
+	
+	return lines.length;
+}
+
+enviarScript(`
+
+Culpa de Rocinante! ó dura estrela!Que esta manchega dama, e este invictoandante cavaleiro, em tenros anosela deixou, morrendo, de ser bela,ele, ainda que em mármores inscrito,não evitou o amor, iras e enganos.Do Caprichoso, discretíssimo acadêmico de Argamasilla, em louvor de Rocinante, cavalo de D. Quixote de la Mancha.SONETONo alto e soberbo trono diamantino,que com sangrentas plantas pisa Marte,o manchego frenético o estandartetremula, com esforço peregrino.Pendura as armas e o aço fino,com que assola, destroça, racha e parte!Novas proezas! mas inventa a arteum novo estilo ao novo paladino.Se do seu Amadis se orgulha a Gaula,por cuja prole a Grécia gloriosamil vezes triunfou e a fama ensancha;cinge a Quixote um diadema a aulaa que preside a deusa belicosa,e orgulha-se dele a altiva Mancha.Nunca as suas glórias o olvido mancha,pois que até Rocinante em ser galhardoexcede a Brillador, vence a Baiardo.Do Burlador, acadêmico argamasilesco, a Sancho Pança.SONETOPobre de corpo, de bravura rico,Sancho Pança aqui jaz: é coisa estranha!Escudeiro mais simples, mais sem manha,não teve o mundo, juro e certifico!P’ra ser conde faltou-lhe só um nico,se não conspira contra ele a sanhadesta idade mesquinha, vil, tacanha,que nem sequer perdoa a um burrico.No burro andou (e com perdão se diga!)este manso escudeiro, atrás do mansoRocinante e do seu dono bisonho.
+ó vãs esp’ranças! e mais vã fadiga!nunca deixais de prometer descanso,e tudo acaba em sombra, em fumo, em sonho.Do Cachidiabo, acadêmico de Argamasilla, na sepultura de D. Quixote.EPITÁFIOAqui jaz o cavaleirobem moído e mal andante,que, montado em Rocinante,percorreu senda e carreiro. Sancho Pança, o malhadeiro, jaz também neste local, escudeiro o mais leal, que houve em trato de escudeiro.Do Tiquitoe, acadêmico de Argamasilla, na sepultura de Dulcinéia del Toboso.EPITÁFIORepousa aqui Dulcinéia,que, sendo gorda e corada,em cinza e pó foi mudadapela morte horrenda e feia. Foi de castiça raleia, e teve assomos de dama, deu-lhe o grão Quixote a fama, e deu glória à sua aldeia.Foram estes os versos que se puderam ler; os outros, por estar mais carcomida a letra, entregaram-se a um acadêmico, para que por conjecturas os decifrasse. Consta que o fez, à custa de muitas vigílias e de muito trabalho, e que tenciona dá-los à luz, com esperança na terceira saída de D. Quixote.Forse altri canterà con miglior plettro.FIM DA PRIMEIRA PARTEFinis
+
+
+
+
+
+
+
+
+`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)
